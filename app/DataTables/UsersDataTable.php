@@ -18,7 +18,7 @@ class UsersDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', 'users.datatables.action')
-            ->addIndexColumn();
+            ->rawColumns(['row_number', 'action']);
     }
 
     public function query(User $model): QueryBuilder
@@ -31,16 +31,12 @@ class UsersDataTable extends DataTable
         return $this->builder()
             ->setTableId('users-table')
             ->columns($this->getColumns())
+            ->removeColumn('id')
             ->minifiedAjax()
             ->orderBy(0, 'asc')
-            ->selectStyleSingle()
             ->addAction(['width' => '80px'])
             ->buttons([
                 Button::make('add'),
-                // Button::make('excel'),
-                // Button::make('csv'),
-                // Button::make('pdf'),
-                // Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload'),
             ]);
@@ -49,11 +45,14 @@ class UsersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
+            Column::make('row_number')
+                ->title('#')
+                ->render('meta.row + meta.settings._iDisplayStart + 1;')
+                ->width(50)
+                ->orderable(false)
+                ->searchable(false),
             Column::make('name'),
             Column::make('email'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\DeletedUsersDataTable;
 use App\DataTables\UsersDataTable;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -15,7 +16,9 @@ class UserController extends Controller
      */
     public function index(UsersDataTable $dataTable)
     {
-        return $dataTable->render('users.index');
+        $header = "All Users";
+        $all = true;
+        return $dataTable->render('users.index', compact('header', 'all'));
     }
 
     /**
@@ -71,5 +74,32 @@ class UserController extends Controller
     {
         $user->delete();
         return redirect()->route('users.index')->with('message', 'User Deleted');
+    }
+
+    public function deleted(DeletedUsersDataTable $dataTable)
+    {
+        $header = "Deleted Users";
+        $all = false;
+        return $dataTable->render('users.index', compact('header', 'all'));
+    }
+
+    public function restore($id)
+    {
+        $user = User::withTrashed()->find($id);
+        $user->restore();
+        return redirect()->back()->with('message', 'User re-stored successfully!');
+    }
+
+    public function deletePermanently($id)
+    {
+        $user = User::withTrashed()->find($id);
+        $user->forceDelete();
+        return redirect()->back()->with('message', 'User Removed from System');
+    }
+
+    public function restoreAll()
+    {
+        User::withTrashed()->restore();
+        return redirect()->back()->with('message', 'All Deleted User re-stored successfully!');
     }
 }

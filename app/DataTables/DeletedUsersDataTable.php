@@ -36,9 +36,8 @@ class DeletedUsersDataTable extends DataTable
             ->orderBy(0, 'asc')
             ->addAction(['width' => '80px'])
             ->buttons([
-                // Button::make('add'),
-                // Button::make('reset'),
-                // Button::make('reload'),
+                Button::make('reset'),
+                Button::make('reload'),
             ]);
     }
 

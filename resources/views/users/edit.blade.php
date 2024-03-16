@@ -45,7 +45,7 @@
 
                 <div>
                     
-                    <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src="https://www.gravatar.com/avatar/00000000000000000000000000000000" alt="Bordered avatar">
+                    <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src="{{ url('storage/avatars/' . $user->avatar) }}" alt="Bordered avatar">
 
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         User avatar

@@ -12,7 +12,7 @@
 
             <div class="w-full flex justify-center sm:justify-start sm:w-auto">
                 <img class="object-cover w-20 h-20 mt-3 mr-3 rounded-full"
-                    src="https://www.gravatar.com/avatar/00000000000000000000000000000000">
+                    src="{{ url('storage/avatars/'.$user->avatar) }}">
             </div>
 
             <div class="w-full sm:w-auto flex flex-col items-center sm:items-start">

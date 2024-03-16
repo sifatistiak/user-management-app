@@ -18,7 +18,19 @@ class UsersDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', 'users.datatables.action')
-            ->rawColumns(['row_number', 'action']);
+            ->editColumn(
+                'avatar',
+                function ($user) {
+                    if (!empty($user->avatar)) {
+                        $imageUrl = url("storage/avatars/{$user->avatar}");
+
+                        return '<img src="' . $imageUrl . '" border="0" width="40" class="img-rounded" />';
+                    } else {
+                        return '<img src="#" border="0" width="40" class="img-rounded" />';
+                    }
+                }
+            )
+            ->rawColumns(['row_number', 'action', 'avatar']);
     }
 
     public function query(User $model): QueryBuilder
@@ -53,6 +65,7 @@ class UsersDataTable extends DataTable
                 ->searchable(false),
             Column::make('name'),
             Column::make('email'),
+            Column::make('avatar')->orderable(false)->searchable(false)->width(100),
         ];
     }
 

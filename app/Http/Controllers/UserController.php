@@ -34,9 +34,24 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        // $file = request()->file('avatar');
-
         $user = User::create($request->all());
+
+        // Handle file Upload
+        if ($request->hasFile('avatar') && $user) {
+
+            $filenameWithExt = $request->file('avatar')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('avatar')->getClientOriginalExtension();
+
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+            
+            // Upload Image
+            $request->file('avatar')->storeAs('public/avatars', $fileNameToStore);
+
+            $user->avatar = $fileNameToStore;
+
+            $user->save();
+        }
 
         return redirect()->back()->with('message', 'User stored successfully!');
     }
@@ -63,6 +78,23 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $user->update($request->all());
+
+        // Handle file Upload
+        if ($request->hasFile('avatar')) {
+
+            $filenameWithExt = $request->file('avatar')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('avatar')->getClientOriginalExtension();
+
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+
+            // Upload Image
+            $request->file('avatar')->storeAs('public/avatars', $fileNameToStore);
+
+            $user->avatar = $fileNameToStore;
+
+            $user->update();
+        }
 
         return redirect()->route('users.index')->with('message', 'User Updated');
     }

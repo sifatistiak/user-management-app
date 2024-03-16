@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create User') }}
+            {{ __('Edit User') . " (" . $user->name . ")" }}
         </h2>
     </x-slot>
 
@@ -19,7 +19,8 @@
                 </div>
             @endif
 
-            <form class="space-y-6" method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
+            <form class="space-y-6" method="POST" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
+                @method('PATCH')
                 @csrf
                 <div>
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -28,6 +29,7 @@
                     </label>
                     <input type="text" name="name" id="name"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        value="{{ $user->name }}"
                         placeholder="Full Name" required />
                 </div>
                 <div>
@@ -37,10 +39,14 @@
                     </label>
                     <input type="email" name="email" id="email"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        value="{{ $user->email }}"
                         placeholder="mail@example.com" required />
                 </div>
 
                 <div>
+                    
+                    <img class="w-10 h-10 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src="https://www.gravatar.com/avatar/00000000000000000000000000000000" alt="Bordered avatar">
+
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         User avatar
                     </label>
@@ -56,9 +62,8 @@
 
                 <button type="submit"
                     class="bg-emerald-300	hover:bg-emerald-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
-                    Submit
+                    Update
                 </button>
-
             </form>
         </div>
     </div>
